@@ -1,0 +1,44 @@
+[tool.poetry]
+name = "ocr-lotr-home"
+version = "0.1.0"
+description = ""
+authors = ["Darshan Kothari <dkothari777@gmail.com>"]
+readme = "README.md"
+packages = [{ include = "src" }]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pytesseract = "^0.3.10"
+opencv-python = "^4.8.1.78"
+easyocr = "^1.7.1"
+
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.3.0"
+pytest = "^7.4.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.black]
+include = '\.pyi?$'
+exclude = '''
+    /(
+        \.eggs  # exclude a directory named ".eggs"
+        | \.git  # exclude a directory named ".git"
+        | \.hg  # exclude a directory named ".hg"
+        | \.mypy_cache  # exclude a directory named ".mypy_cache"
+        | \.nox  # exclude a directory named ".nox"
+        | \.venv  # exclude a directory named ".venv"
+        | _build  # exclude a directory called "_build"
+        | buck-out  # exclude a directory called "buck-out"
+        | build  # exclude a directory called "build"
+        | dist  # exclude a directory called "dist"
+        | venv  # exclude a directory called "venv"
+    )/
+'''
+line-length = 88
+target-version = ['py38']
