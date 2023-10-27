@@ -10,6 +10,7 @@ def main(path):
     csv_service = LotrCSVWriter()
     list_of_images = dir_service.list_images()
     table_dict = {}
+    line_number = 1
     for image in list_of_images:
         print(f"Parsing Image: {image}")
         lines = ocr.read_image(image)
@@ -17,10 +18,11 @@ def main(path):
         count = 0
         for line in split_lines:
             if "Difficulty" in line:
-                score = LotrScore(line, image)
+                score = LotrScore(line, image, line_number)
                 player_id = score.player_id
                 # print(f"player_id: {player_id}, score: {score}")
                 count += 1
+                line_number += 1
                 if player_id in table_dict.keys():
                     player_scores: LotrPlayerScore = table_dict[player_id]
                     player_scores.add(score)

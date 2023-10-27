@@ -4,7 +4,7 @@ import re
 
 class LotrScore(object):
 
-    def __init__(self, line, image):
+    def __init__(self, line, image, line_number):
         line_splits = line.split("|")
         self.player_id, index = self.parse_player_id(line_splits)
         self.difficulty, index = self.parse_difficulty(line_splits, index)
@@ -12,6 +12,7 @@ class LotrScore(object):
         self.hashcode = hash(line)
         self.possible_duplicate = False
         self.image = image
+        self.line_number = line_number
 
     @staticmethod
     def parse_player_id(arr_text, starting_index=0):
@@ -50,7 +51,7 @@ class LotrScore(object):
 
     def to_dict(self):
         return {"player_id": self.player_id, "difficulty": self.difficulty, "score": self.score,
-                "possible_duplicate": self.possible_duplicate, "image_file": self.image}
+                "possible_duplicate": self.possible_duplicate, "image_file": self.image, "line_number": self.line_number}
 
 
 
