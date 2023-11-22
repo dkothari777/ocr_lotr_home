@@ -4,7 +4,28 @@ import re
 
 class LotrScore(object):
 
-    def __init__(self, line, image, line_number):
+    def __init__(self):
+        self.hashcode = None
+        self.image = None
+        self.possible_duplicate = None
+        self.score = None
+        self.difficulty = None
+        self.player_id = None
+        self.line_number = None
+
+    def __int__(self):
+        pass
+
+    def ranking_init(self, line_number, player_id, difficulty, score, possible_duplicate, image):
+        self.line_number = int(line_number)
+        self.player_id = player_id
+        self.difficulty = int(difficulty)
+        self.score = int(score)
+        self.possible_duplicate = bool(possible_duplicate)
+        self.image = image
+        self.hashcode = hash(str(line_number) + player_id + str(difficulty) + str(score) + str(possible_duplicate) + image)
+
+    def image_init(self, line, image, line_number):
         line_splits = line.split("|")
         self.player_id, index = self.parse_player_id(line_splits)
         self.difficulty, index = self.parse_difficulty(line_splits, index)
@@ -50,9 +71,9 @@ class LotrScore(object):
                f"possible_duplicate: {self.possible_duplicate}"
 
     def to_dict(self):
-        return {"player_id": self.player_id, "difficulty": self.difficulty, "score": self.score,
-                "possible_duplicate": self.possible_duplicate, "image_file": self.image, "line_number": self.line_number}
-
+        return {"line_number": self.line_number, "player_id": self.player_id, "difficulty": self.difficulty,
+                "score": self.score,
+                "possible_duplicate": self.possible_duplicate, "image_file": self.image}
 
 
 class LotrPlayerScore(object):
@@ -85,3 +106,12 @@ class LotrPlayerScore(object):
 
     def to_dict(self):
         return {'player_id': self.player_id, 'total_battles': self.total_battles(), 'total_score': self.total_score()}
+
+    def to_attempts(self):
+        player_dict = {}
+        player_dict["player_id"] = self.player_id
+        for x in range(len(self.player_score)):
+            attempt_number = x + 1
+            player_dict[f"attempt_{attempt_number}"] = self.player_score[x].score
+        player_dict["total_score"] = self.score
+        return player_dict

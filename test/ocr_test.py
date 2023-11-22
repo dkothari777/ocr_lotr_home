@@ -19,7 +19,7 @@ class MyTestCase(unittest.TestCase):
         # print()
         # do_test("/Users/darshankothari/workspace/ocr_lotr_home/test/test-images/IMG_0861.PNG")
         set_image(True)
-        do_test("/Users/darshankothari/workspace/ocr_lotr_home/chapter_4_10_22_2023/IMG_0922.PNG")
+        do_test("/Users/darshankothari/workspace/ocr_lotr_home/chapter_2/IMG_1239.PNG")
 
 
     def test_easy_ocr(self):

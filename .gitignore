@@ -3,3 +3,5 @@
 *.PNG
 **/__pycache__/**
 *.pyc
+crew.txt
+.DS_Store

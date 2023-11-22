@@ -36,6 +36,7 @@ def custom_grayscale(image):
 # get grayscale image
 def get_grayscale(image):
     img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    img = cv2.equalizeHist(img)
     show_image("gray", img)
     return img
 
@@ -49,14 +50,14 @@ def get_hsv(image):
 
 # noise removal
 def remove_noise(image):
-    img = cv2.medianBlur(image, 3)
+    img = cv2.medianBlur(image, 5)
     show_image("noise", image)
     return img
 
 
 # thresholding
 def thresholding(image):
-    result = cv2.threshold(image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+    result = cv2.threshold(image, 160, 255, cv2.THRESH_BINARY)[1]
     show_image("threshold", result)
     return result
 
@@ -64,7 +65,7 @@ def thresholding(image):
 # dilation
 def dilate(image):
     kernel = np.ones((2, 2), np.uint16)
-    result = cv2.dilate(image, kernel, iterations=1)
+    result = cv2.dilate(image, kernel, iterations=5)
     show_image("dilate", result)
     return result
 
@@ -80,7 +81,7 @@ def erode(image):
 # opening - erosion followed by dilation
 def opening(image):
     kernel = np.ones((2, 2), np.uint16)
-    result = cv2.morphologyEx(image, cv2.MORPH_OPEN, kernel)
+    result = cv2.morphologyEx(image, cv2.MORPH_RECT, kernel)
     show_image("opening", result)
     return result
 
@@ -114,11 +115,18 @@ def match_template(image, template):
 
 def read_image(filename):
     original_image = cv2.imread(filename)
-    original_image[original_image <= 130] = 0
-    original_image[original_image >= 150] = 255
-    # img = thresholding(get_grayscale(remove_noise(opening(erode(dilate(get_hsv(original_image)))))))
-    img = erode(thresholding(get_grayscale(remove_noise(original_image))))
+    resized_img = cv2.resize(original_image, None, fx=5, fy=5, interpolation=cv2.INTER_AREA)
+    resized_img[resized_img <= 130] = 0
+    resized_img[resized_img >= 150] = 255
 
+    # threshold = 200  # you might need to adjust this threshold level
+    # resized_img = resized_img.p(lambda p: p > threshold and 255)
+    # Apply a filter to smooth the image (GaussianBlur for example)
+    # The kernel size can be adjusted; here it's set to (5, 5)
+    smooth_img = cv2.GaussianBlur(resized_img, (5, 5), 0)
+    # img = thresholding(get_grayscale(remove_noise(opening(erode(dilate(get_hsv(original_image)))))))
+    # img = erode(thresholding(get_grayscale(remove_noise(smooth_img))))
+    img = remove_noise(opening(dilate(smooth_img)))
     # Adding custom options
     custom_config = r'-l eng --oem 3 --psm 6'
     return pytesseract.image_to_string(img, config=custom_config)
@@ -128,9 +136,16 @@ def read_image(filename):
 def read_easyocr_image(filename):
     reader = easyocr.Reader(['en'])
     original_image = cv2.imread(filename)
-    img = remove_noise(get_hsv(original_image))
+    resized_img = cv2.resize(original_image, None, fx=5, fy=5, interpolation=cv2.INTER_LINEAR_EXACT)
+    resized_img[resized_img <= 130] = 0
+    resized_img[resized_img >= 150] = 255
+    # img = remove_noise(get_hsv(original_image))
+    smooth_img = cv2.GaussianBlur(resized_img, (3, 3), 0)
+    # img = thresholding(get_grayscale(remove_noise(opening(erode(dilate(get_hsv(original_image)))))))
+    # img = erode(thresholding(get_grayscale(remove_noise(smooth_img))))
+    img = get_grayscale(dilate(smooth_img))
     read_text = reader.readtext(img)
     results = ""
     for ((x_min, y_min, x_max, y_max), text, confidence,) in read_text:
         results = results + text + "\n"
-    return results
+    return results.split("\n")
