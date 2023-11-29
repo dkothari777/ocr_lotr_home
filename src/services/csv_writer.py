@@ -11,21 +11,24 @@ class LotrCSVWriter():
         for v in lotr_dict.values():
             for i in v.get_player_score():
                 arr.append(i.to_dict())
-        self.write_file("ranking.csv", arr)
+        sorted_arr = sorted(arr, key=lambda x: x['line_number'])
+        self.write_file("ranking.csv", sorted_arr)
         return arr
 
     def write_total_csv(self, lotr_dict: dict):
         arr = []
         for v in lotr_dict.values():
             arr.append(v.to_dict())
-        self.write_file("totals.csv", arr)
+        sorted_arr = sorted(arr, key=lambda x: x['player_id'].lower())
+        self.write_file("totals.csv", sorted_arr)
         return arr
 
     def write_attempt_csv(self, lotr_dict: dict):
         arr = []
         for v in lotr_dict.values():
             arr.append(v.to_attempts())
-        self.write_file("attempts.csv", arr)
+        sorted_arr = sorted(arr, key=lambda x: x['player_id'].lower())
+        self.write_file("attempts.csv", sorted_arr)
         return arr
 
     @staticmethod
