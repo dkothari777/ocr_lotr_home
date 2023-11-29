@@ -102,6 +102,7 @@ def parse_easyocr(images, crew_list_path):
     dir_service.cleanup()
     csv_service.write_ranking_csv(table_dict)
     csv_service.write_total_csv(table_dict)
+    csv_service.write_attempt_csv(table_dict)
 
 
 def parse_arguments():

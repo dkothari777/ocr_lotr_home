@@ -30,7 +30,7 @@ class LotrCSVWriter():
 
     @staticmethod
     def write_file(filename, data):
-        fieldnames = data[0].keys()
+        fieldnames = max(data, key=lambda x: len(x)).keys()
         with open(filename, mode='w', newline='') as file:
             writer = csv.DictWriter(file, fieldnames=fieldnames)
             writer.writeheader()

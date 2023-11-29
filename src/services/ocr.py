@@ -144,7 +144,7 @@ def read_easyocr_image(filename):
     # img = thresholding(get_grayscale(remove_noise(opening(erode(dilate(get_hsv(original_image)))))))
     # img = erode(thresholding(get_grayscale(remove_noise(smooth_img))))
     img = get_grayscale(dilate(smooth_img))
-    read_text = reader.readtext(img)
+    read_text = reader.readtext(img, output_format="free_merge")
     results = ""
     for ((x_min, y_min, x_max, y_max), text, confidence,) in read_text:
         results = results + text + "\n"
