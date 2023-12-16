@@ -19,7 +19,7 @@ class LotrScore(object):
     def ranking_init(self, line_number, player_id, difficulty, score, possible_duplicate, image):
         self.line_number = int(line_number)
         self.player_id = player_id
-        self.difficulty = int(difficulty)
+        self.difficulty = int(difficulty.strip("_"))
         self.score = int(score)
         self.possible_duplicate = bool(possible_duplicate)
         self.image = image

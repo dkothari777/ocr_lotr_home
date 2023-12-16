@@ -63,13 +63,19 @@ def get_name(line, crew_list):
             return name
     return None
 
+def build_crew_scoreboard(crew_list):
+    scoreboard_dict = {}
+    for crew_name in crew_list:
+        score = LotrPlayerScore(crew_name)
+        scoreboard_dict[crew_name] = score
+    return scoreboard_dict
 
 def parse_easyocr(images, crew_list_path):
     crew_list = CrewListService(crew_list_path).crew_list
     dir_service = directory.DirectoryImageService(images)
     csv_service = LotrCSVWriter()
     list_of_images = dir_service.list_images()
-    table_dict = {}
+    table_dict = build_crew_scoreboard(crew_list)
     line_number = 1
     for image in list_of_images:
         print(f"Parsing Image: {image}")

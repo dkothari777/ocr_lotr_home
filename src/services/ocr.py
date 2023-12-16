@@ -136,14 +136,14 @@ def read_image(filename):
 def read_easyocr_image(filename):
     reader = easyocr.Reader(['en'])
     original_image = cv2.imread(filename)
-    resized_img = cv2.resize(original_image, None, fx=5, fy=5, interpolation=cv2.INTER_LINEAR_EXACT)
+    resized_img = cv2.resize(original_image, None, fx=3, fy=3, interpolation=cv2.INTER_LINEAR_EXACT)
     resized_img[resized_img <= 130] = 0
     resized_img[resized_img >= 150] = 255
     # img = remove_noise(get_hsv(original_image))
     smooth_img = cv2.GaussianBlur(resized_img, (3, 3), 0)
     # img = thresholding(get_grayscale(remove_noise(opening(erode(dilate(get_hsv(original_image)))))))
     # img = erode(thresholding(get_grayscale(remove_noise(smooth_img))))
-    img = get_grayscale(dilate(smooth_img))
+    img = get_grayscale(erode(dilate(smooth_img)))
     read_text = reader.readtext(img, output_format="free_merge")
     results = ""
     for ((x_min, y_min, x_max, y_max), text, confidence,) in read_text:
