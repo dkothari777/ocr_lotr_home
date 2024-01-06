@@ -51,7 +51,9 @@ def is_formatted_number(s):
 def check_if_name_exist(line, crew_list):
     lower_line = line.strip().lower()
     for name in crew_list:
-        if fuzz.ratio(lower_line, name.strip().lower()) > 85:
+        ratio = fuzz.ratio(lower_line, name.strip().lower())
+        # print(f"Comparing {lower_line} to {name.strip().lower()}: {ratio}")
+        if fuzz.ratio(lower_line, name.strip().lower()) >= 75:
             return True
     return False
 
@@ -59,7 +61,9 @@ def check_if_name_exist(line, crew_list):
 def get_name(line, crew_list):
     lower_line = line.strip().lower()
     for name in crew_list:
-        if fuzz.ratio(lower_line, name.strip().lower()) > 85:
+        ratio = fuzz.ratio(lower_line, name.strip().lower())
+        # print(f"Comparing {lower_line} to {name.strip().lower()}: {ratio}")
+        if ratio >= 75:
             return name
     return None
 
