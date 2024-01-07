@@ -28,7 +28,7 @@ jobs:
       - name: Compile with PyInstaller
         run: |
           poetry shell
-          poetry build
+          pyinstaller --onefile src/__main__.py
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
